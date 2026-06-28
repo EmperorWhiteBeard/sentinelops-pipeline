@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        SONAR_HOST_URL = 'http://localhost:9000'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -46,7 +42,7 @@ pipeline {
             }
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner -Dsonar.host.url=${SONAR_HOST_URL}'
+                    sh 'sonar-scanner'
                 }
             }
         }
