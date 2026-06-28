@@ -41,12 +41,12 @@ pipeline {
                 docker {
                     image 'sonarsource/sonar-scanner-cli:latest'
                     reuseNode true
-                    args '--network host'
+                    args '--network host --entrypoint=""'
                 }
             }
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL'
+                    sh 'sonar-scanner -Dsonar.host.url="$SONAR_HOST_URL"'
                 }
             }
         }
