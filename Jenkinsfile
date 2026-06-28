@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        SONAR_HOST_URL = 'http://65.2.57.156:9000'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -29,6 +33,21 @@ pipeline {
             }
             steps {
                 sh 'npm run build'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            agent {
+                docker {
+                    image 'sonarsource/sonar-scanner-cli:latest'
+                    reuseNode true
+                    args '--network host'
+                }
+            }
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL'
+                }
             }
         }
     }
